@@ -11,8 +11,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    app_name: str
-    llm_model: str
+    app_name: str = "AnotherMe Chat Server"
 
 
 @lru_cache
