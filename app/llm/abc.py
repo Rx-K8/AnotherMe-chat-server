@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections.abc import AsyncIterator
+from collections.abc import AsyncGenerator
 
 from app.schemas.chat import Message
 from app.schemas.llm import LLMResponse, LLMStreamChunk
@@ -39,7 +39,7 @@ class LLMProvider(ABC):
         messages: list[Message],
         temperature: float | None = None,
         max_tokens: int | None = None,
-    ) -> AsyncIterator[LLMStreamChunk]:
+    ) -> AsyncGenerator[LLMStreamChunk]:
         """
         ストリーミング形式で応答を生成する
 
@@ -51,4 +51,4 @@ class LLMProvider(ABC):
         Yields:
             LLMStreamChunk: ストリーミング応答のチャンク
         """
-        pass
+        yield  # type: ignore[misc]

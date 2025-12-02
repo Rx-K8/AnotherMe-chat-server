@@ -5,7 +5,7 @@
 
 import asyncio
 import random
-from collections.abc import AsyncIterator
+from collections.abc import AsyncGenerator
 
 from app.llm.abc import LLMProvider
 from app.schemas.chat import Message
@@ -107,7 +107,7 @@ class MockLLMProvider(LLMProvider):
         messages: list[Message],
         temperature: float | None = None,
         max_tokens: int | None = None,
-    ) -> AsyncIterator[LLMStreamChunk]:
+    ) -> AsyncGenerator[LLMStreamChunk]:
         """ストリーミング形式でモックレスポンスを生成する。
 
         Args:
