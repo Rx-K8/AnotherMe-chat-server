@@ -1,7 +1,7 @@
 import time
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class Message(BaseModel):
@@ -12,6 +12,14 @@ class Message(BaseModel):
     )
     content: str = Field(..., description="メッセージの内容。")
 
+    @field_validator("content")
+    @classmethod
+    def content_must_not_be_empty(cls, v: str) -> str:
+        """コンテンツが空でないことを検証する。"""
+        if not v.strip():
+            raise ValueError("メッセージの内容は空にできません。")
+        return v
+
 
 class ChatCompletionRequest(BaseModel):
     """チャット完了作成のリクエストボディ。"""
@@ -20,11 +28,31 @@ class ChatCompletionRequest(BaseModel):
     messages: list[Message] = Field(
         ...,
         description="これまでの会話を構成するメッセージのリスト。",
+        min_length=1,
     )
     stream: bool = Field(
         default=False,
         description="設定すると、部分的なメッセージデルタがSSEで送信される。",
     )
+    temperature: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=2.0,
+        description="サンプリング温度（0.0-2.0）。高いほどランダム性が増す。",
+    )
+    max_tokens: int | None = Field(
+        default=None,
+        gt=0,
+        description="生成する最大トークン数。",
+    )
+
+    @field_validator("messages")
+    @classmethod
+    def validate_messages(cls, v: list[Message]) -> list[Message]:
+        """メッセージリストのバリデーション。"""
+        if not v:
+            raise ValueError("メッセージリストは空にできません。")
+        return v
 
 
 class Choice(BaseModel):
