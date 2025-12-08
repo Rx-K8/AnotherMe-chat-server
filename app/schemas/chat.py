@@ -20,6 +20,10 @@ class Message(BaseModel):
             raise ValueError("メッセージの内容は空にできません。")
         return v
 
+    def to_dict(self) -> dict[str, str]:
+        """メッセージを辞書形式に変換する。"""
+        return {"role": self.role, "content": self.content}
+
 
 class ChatCompletionRequest(BaseModel):
     """チャット完了作成のリクエストボディ。"""

@@ -25,3 +25,4 @@ class LLMStreamChunk(BaseModel):
     is_final: bool = Field(
         ..., description="これがストリーミングレスポンスの最後のチャンクかどうか。"
     )
+    model: str = Field(..., description="チャンクに使用されたモデル。")
