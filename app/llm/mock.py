@@ -126,6 +126,7 @@ class MockLLMProvider(LLMProvider):
         for i, char in enumerate(content):
             is_final = i == len(content) - 1
             yield LLMStreamChunk(
+                model="mock",
                 content=char,
                 finish_reason="stop" if is_final else "",
                 is_final=is_final,

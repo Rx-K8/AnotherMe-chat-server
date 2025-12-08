@@ -3,7 +3,7 @@
 FastAPIの依存性注入システムで使用する依存関係を定義する。
 """
 
-from app.llm.mock import MockLLMProvider
+from app.llm.qwen3 import Qwen3Provider
 from app.services.chat_server import ChatServe
 
 
@@ -18,5 +18,6 @@ def get_chat_service() -> ChatServe:
     """
     # TODO: 実際のLLMプロバイダーを設定から取得して注入する
     # 例: llm_provider = OpenAIProvider(api_key=settings.openai_api_key)
-    llm_provider = MockLLMProvider()
+    # llm_provider = MockLLMProvider()
+    llm_provider = Qwen3Provider()
     return ChatServe(llm_provider=llm_provider)
