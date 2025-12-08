@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     )
 
     app_name: str = "AnotherMe Chat Server"
+    llm_provider: str = "gemma3"  # "gemma3", "qwen3", "mock"
+    llm_model_name: str | None = None  # モデル名（Noneの場合はデフォルト値を使用）
 
 
 @lru_cache
