@@ -61,7 +61,7 @@ class Gemma3Provider(LLMProvider):
 
         Args:
             messages: 会話履歴のメッセージリスト
-            temperature: 生成の温度パラメータ（0.0-2.0）
+            temperature: 生成の温度パラメータ
             max_new_tokens: 生成する最大トークン数
 
         Returns:
@@ -111,7 +111,7 @@ class Gemma3Provider(LLMProvider):
 
         Args:
             messages: 会話履歴のメッセージリスト
-            temperature: 生成の温度パラメータ（0.0-2.0）
+            temperature: 生成の温度パラメータ
             max_new_tokens: 生成する最大トークン数
 
         Yields:

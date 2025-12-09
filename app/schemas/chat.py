@@ -40,8 +40,8 @@ class ChatCompletionRequest(BaseModel):
     temperature: float | None = Field(
         default=None,
         ge=0.0,
-        le=2.0,
-        description="サンプリング温度（0.0-2.0）。高いほどランダム性が増す。",
+        le=1.0,
+        description="サンプリング温度（0.0-1.0）。高いほどランダム性が増す。",
     )
     max_new_tokens: int | None = Field(
         default=None,

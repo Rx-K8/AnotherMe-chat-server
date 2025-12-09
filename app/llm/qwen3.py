@@ -31,6 +31,16 @@ class Qwen3Provider(LLMProvider):
         temperature: float | None = None,
         max_new_tokens: int | None = None,
     ) -> LLMResponse:
+        """メッセージリストに基づいて応答を生成する。
+
+        Args:
+            messages: 会話履歴のメッセージリスト
+            temperature: 生成の温度パラメータ
+            max_new_tokens: 生成する最大トークン数
+
+        Returns:
+            LLMResponse: 生成された応答
+        """
         message_dicts = [msg.to_dict() for msg in messages]
         text = self.tokenizer.apply_chat_template(
             message_dicts, tokenize=False, add_generation_prompt=True
@@ -64,6 +74,16 @@ class Qwen3Provider(LLMProvider):
         temperature: float | None = None,
         max_new_tokens: int | None = None,
     ) -> AsyncGenerator[LLMStreamChunk]:
+        """ストリーミング形式で応答を生成する。
+
+        Args:
+            messages: 会話履歴のメッセージリスト
+            temperature: 生成の温度パラメータ
+            max_new_tokens: 生成する最大トークン数
+
+        Yields:
+            LLMStreamChunk: ストリーミング応答のチャンク
+        """
         message_dicts = [msg.to_dict() for msg in messages]
         text = self.tokenizer.apply_chat_template(
             message_dicts, tokenize=False, add_generation_prompt=True
