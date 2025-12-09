@@ -1,8 +1,3 @@
-"""モックLLMプロバイダー。
-
-テストおよび開発用のモックLLMプロバイダーを提供する。
-"""
-
 import asyncio
 import random
 from collections.abc import AsyncGenerator
