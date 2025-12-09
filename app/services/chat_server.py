@@ -39,7 +39,7 @@ class ChatServe:
         llm_response = await self.llm_provider.generate(
             messages=request.messages,
             temperature=request.temperature,
-            max_tokens=request.max_tokens,
+            max_new_tokens=request.max_new_tokens,
         )
 
         choices = [
@@ -71,7 +71,7 @@ class ChatServe:
         async for chunk in self.llm_provider.generate_stream(
             messages=request.messages,
             temperature=request.temperature,
-            max_tokens=request.max_tokens,
+            max_new_tokens=request.max_new_tokens,
         ):
             choice_chunk = ChoiceChunk(
                 index=0,

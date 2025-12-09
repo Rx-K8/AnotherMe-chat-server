@@ -22,12 +22,13 @@ class Gemma3Provider(LLMProvider):
         Args:
             model_name: モデル名
         """
+        super().__init__()
         self.model_name = model_name
         self.processor = AutoProcessor.from_pretrained(model_name)  # type: ignore[no-untyped-call]
         self.model = Gemma3ForConditionalGeneration.from_pretrained(
             model_name, device_map="auto"
         ).eval()
-        self.max_tokens = 8192
+        self.max_new_tokens = 8192
 
     def _prepare_messages(self, messages: list[Message]) -> list[dict[str, Any]]:
         """メッセージをGemma 3のチャットテンプレート形式に変換する。
@@ -54,14 +55,14 @@ class Gemma3Provider(LLMProvider):
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> LLMResponse:
         """メッセージリストに基づいて応答を生成する。
 
         Args:
             messages: 会話履歴のメッセージリスト
             temperature: 生成の温度パラメータ（0.0-2.0）
-            max_tokens: 生成する最大トークン数
+            max_new_tokens: 生成する最大トークン数
 
         Returns:
             LLMResponse: 生成された応答
@@ -80,7 +81,7 @@ class Gemma3Provider(LLMProvider):
 
         generation_kwargs = {
             **inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else self.max_tokens,
+            "max_new_tokens": self._get_validated_max_new_tokens(max_new_tokens),
         }
 
         if temperature is not None:
@@ -104,14 +105,14 @@ class Gemma3Provider(LLMProvider):
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> AsyncGenerator[LLMStreamChunk]:
         """ストリーミング形式で応答を生成する。
 
         Args:
             messages: 会話履歴のメッセージリスト
             temperature: 生成の温度パラメータ（0.0-2.0）
-            max_tokens: 生成する最大トークン数
+            max_new_tokens: 生成する最大トークン数
 
         Yields:
             LLMStreamChunk: ストリーミング応答のチャンク
@@ -132,7 +133,7 @@ class Gemma3Provider(LLMProvider):
 
         generation_kwargs = {
             **inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else self.max_tokens,
+            "max_new_tokens": self._get_validated_max_new_tokens(max_new_tokens),
             "streamer": streamer,
         }
 

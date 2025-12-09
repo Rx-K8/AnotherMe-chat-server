@@ -17,19 +17,19 @@ class Qwen3Provider(LLMProvider):
         Args:
             model_name: モデル名
         """
-
+        super().__init__()
         self.model_name = model_name
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)  # type: ignore[no-untyped-call]
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, torch_dtype="auto", device_map="auto"
         )
-        self.max_tokens = 16384
+        self.max_new_tokens = 16384
 
     async def generate(
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> LLMResponse:
         message_dicts = [msg.to_dict() for msg in messages]
         text = self.tokenizer.apply_chat_template(
@@ -40,7 +40,7 @@ class Qwen3Provider(LLMProvider):
 
         generation_kwargs = {
             **model_inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else self.max_tokens,
+            "max_new_tokens": self._get_validated_max_new_tokens(max_new_tokens),
         }
 
         if temperature is not None:
@@ -62,7 +62,7 @@ class Qwen3Provider(LLMProvider):
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> AsyncGenerator[LLMStreamChunk]:
         message_dicts = [msg.to_dict() for msg in messages]
         text = self.tokenizer.apply_chat_template(
@@ -76,7 +76,7 @@ class Qwen3Provider(LLMProvider):
 
         generation_kwargs = {
             **model_inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else self.max_tokens,
+            "max_new_tokens": self._get_validated_max_new_tokens(max_new_tokens),
             "streamer": streamer,
         }
 

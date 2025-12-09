@@ -44,7 +44,7 @@ class ChatCompletionRequest(BaseModel):
         le=2.0,
         description="サンプリング温度（0.0-2.0）。高いほどランダム性が増す。",
     )
-    max_tokens: int | None = Field(
+    max_new_tokens: int | None = Field(
         default=None,
         gt=0,
         description="生成する最大トークン数。",
