@@ -30,8 +30,12 @@ def get_llm_provider() -> LLMProvider:
     Raises:
         RuntimeError: プロバイダーが初期化されていない場合
     """
-    settings = get_settings()
-    return create_provider(settings.llm_model_name)
+    if _llm_provider is None:
+        raise RuntimeError(
+            "LLMプロバイダーが初期化されていません。"
+            "アプリケーション起動時にinitialize_llm_provider()を呼び出してください。"
+        )
+    return _llm_provider
 
 
 def get_chat_service() -> ChatServe:
