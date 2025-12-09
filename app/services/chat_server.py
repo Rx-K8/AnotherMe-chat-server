@@ -50,9 +50,7 @@ class ChatServe:
             )
         ]
 
-        return ChatCompletionResponse(
-            id=f"chatcmp-{uuid.uuid4()}", model=request.model, choices=choices
-        )
+        return ChatCompletionResponse(id=f"chatcmp-{uuid.uuid4()}", choices=choices)
 
     async def generate_response_stream(
         self, request: ChatCompletionRequest
@@ -84,6 +82,5 @@ class ChatServe:
 
             yield ChatCompletionChunkResponse(
                 id=response_id,
-                model=request.model,
                 choices=[choice_chunk],
             )

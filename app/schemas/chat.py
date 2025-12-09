@@ -28,7 +28,6 @@ class Message(BaseModel):
 class ChatCompletionRequest(BaseModel):
     """チャット完了作成のリクエストボディ。"""
 
-    model: str = Field(..., description="チャット完了に使用するモデルのID。")
     messages: list[Message] = Field(
         ...,
         description="これまでの会話を構成するメッセージのリスト。",
@@ -89,7 +88,6 @@ class ChatCompletionResponse(BaseModel):
         default_factory=lambda: int(time.time()),
         description="チャット完了が作成されたUnixタイムスタンプ（秒）。",
     )
-    model: str = Field(..., description="チャット完了に使用されたモデル。")
     choices: list[Choice] = Field(
         ...,
         description="チャット完了の選択肢リスト。nが1より大きい場合、複数になる。",
@@ -139,7 +137,6 @@ class ChatCompletionChunkResponse(BaseModel):
         default_factory=lambda: int(time.time()),
         description="チャット完了チャンクが作成されたUnixタイムスタンプ（秒）。",
     )
-    model: str = Field(..., description="チャット完了に使用されたモデル。")
     choices: list[ChoiceChunk] = Field(
         ...,
         description="チャット完了の選択肢リスト。nが1より大きい場合、複数になる。",
