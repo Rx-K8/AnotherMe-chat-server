@@ -28,7 +28,6 @@ class Message(BaseModel):
 class ChatCompletionRequest(BaseModel):
     """チャット完了作成のリクエストボディ。"""
 
-    model: str = Field(..., description="チャット完了に使用するモデルのID。")
     messages: list[Message] = Field(
         ...,
         description="これまでの会話を構成するメッセージのリスト。",
@@ -41,10 +40,10 @@ class ChatCompletionRequest(BaseModel):
     temperature: float | None = Field(
         default=None,
         ge=0.0,
-        le=2.0,
-        description="サンプリング温度（0.0-2.0）。高いほどランダム性が増す。",
+        le=1.0,
+        description="サンプリング温度（0.0-1.0）。高いほどランダム性が増す。",
     )
-    max_tokens: int | None = Field(
+    max_new_tokens: int | None = Field(
         default=None,
         gt=0,
         description="生成する最大トークン数。",
@@ -89,7 +88,6 @@ class ChatCompletionResponse(BaseModel):
         default_factory=lambda: int(time.time()),
         description="チャット完了が作成されたUnixタイムスタンプ（秒）。",
     )
-    model: str = Field(..., description="チャット完了に使用されたモデル。")
     choices: list[Choice] = Field(
         ...,
         description="チャット完了の選択肢リスト。nが1より大きい場合、複数になる。",
@@ -139,7 +137,6 @@ class ChatCompletionChunkResponse(BaseModel):
         default_factory=lambda: int(time.time()),
         description="チャット完了チャンクが作成されたUnixタイムスタンプ（秒）。",
     )
-    model: str = Field(..., description="チャット完了に使用されたモデル。")
     choices: list[ChoiceChunk] = Field(
         ...,
         description="チャット完了の選択肢リスト。nが1より大きい場合、複数になる。",

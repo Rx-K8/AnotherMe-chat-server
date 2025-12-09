@@ -39,7 +39,7 @@ class ChatServe:
         llm_response = await self.llm_provider.generate(
             messages=request.messages,
             temperature=request.temperature,
-            max_tokens=request.max_tokens,
+            max_new_tokens=request.max_new_tokens,
         )
 
         choices = [
@@ -50,9 +50,7 @@ class ChatServe:
             )
         ]
 
-        return ChatCompletionResponse(
-            id=f"chatcmp-{uuid.uuid4()}", model=request.model, choices=choices
-        )
+        return ChatCompletionResponse(id=f"chatcmp-{uuid.uuid4()}", choices=choices)
 
     async def generate_response_stream(
         self, request: ChatCompletionRequest
@@ -71,7 +69,7 @@ class ChatServe:
         async for chunk in self.llm_provider.generate_stream(
             messages=request.messages,
             temperature=request.temperature,
-            max_tokens=request.max_tokens,
+            max_new_tokens=request.max_new_tokens,
         ):
             choice_chunk = ChoiceChunk(
                 index=0,
@@ -84,6 +82,5 @@ class ChatServe:
 
             yield ChatCompletionChunkResponse(
                 id=response_id,
-                model=request.model,
                 choices=[choice_chunk],
             )

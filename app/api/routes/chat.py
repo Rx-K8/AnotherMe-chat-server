@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
-from app.api.dependencies import get_chat_service
 from app.api.utils.sse import stream_as_sse
+from app.core.dependencies import get_chat_service
 from app.schemas.chat import (
     ChatCompletionRequest,
     ChatCompletionResponse,

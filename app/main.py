@@ -5,8 +5,8 @@ from logging import getLogger
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.dependencies import initialize_llm_provider
 from app.api.main import api_router
+from app.core.dependencies import initialize_llm_provider
 
 logger = getLogger(__name__)
 

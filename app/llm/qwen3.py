@@ -11,25 +11,36 @@ from app.schemas.llm import LLMResponse, LLMStreamChunk
 class Qwen3Provider(LLMProvider):
     """Qwen-3 LLMプロバイダー"""
 
-    def __init__(self, model_name: str = "Qwen/Qwen3-4B-Instruct-2507"):
+    def __init__(self, model_name: str):
         """Qwen-3プロバイダーを初期化する。
 
         Args:
             model_name: モデル名
         """
-
+        super().__init__()
         self.model_name = model_name
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)  # type: ignore[no-untyped-call]
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, torch_dtype="auto", device_map="auto"
         )
+        self.max_new_tokens = 16384
 
     async def generate(
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> LLMResponse:
+        """メッセージリストに基づいて応答を生成する。
+
+        Args:
+            messages: 会話履歴のメッセージリスト
+            temperature: 生成の温度パラメータ
+            max_new_tokens: 生成する最大トークン数
+
+        Returns:
+            LLMResponse: 生成された応答
+        """
         message_dicts = [msg.to_dict() for msg in messages]
         text = self.tokenizer.apply_chat_template(
             message_dicts, tokenize=False, add_generation_prompt=True
@@ -39,7 +50,7 @@ class Qwen3Provider(LLMProvider):
 
         generation_kwargs = {
             **model_inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else 16384,
+            "max_new_tokens": self._get_validated_max_new_tokens(max_new_tokens),
         }
 
         if temperature is not None:
@@ -61,8 +72,18 @@ class Qwen3Provider(LLMProvider):
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> AsyncGenerator[LLMStreamChunk]:
+        """ストリーミング形式で応答を生成する。
+
+        Args:
+            messages: 会話履歴のメッセージリスト
+            temperature: 生成の温度パラメータ
+            max_new_tokens: 生成する最大トークン数
+
+        Yields:
+            LLMStreamChunk: ストリーミング応答のチャンク
+        """
         message_dicts = [msg.to_dict() for msg in messages]
         text = self.tokenizer.apply_chat_template(
             message_dicts, tokenize=False, add_generation_prompt=True
@@ -75,7 +96,7 @@ class Qwen3Provider(LLMProvider):
 
         generation_kwargs = {
             **model_inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else 16384,
+            "max_new_tokens": self._get_validated_max_new_tokens(max_new_tokens),
             "streamer": streamer,
         }
 

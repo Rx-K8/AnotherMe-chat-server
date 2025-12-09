@@ -1,8 +1,3 @@
-"""モックLLMプロバイダー。
-
-テストおよび開発用のモックLLMプロバイダーを提供する。
-"""
-
 import asyncio
 import random
 from collections.abc import AsyncGenerator
@@ -43,7 +38,7 @@ class MockLLMProvider(LLMProvider):
         self,
         model_name: str = "mock-model",
         stream_delay: float = 0.05,
-    ):
+    ) -> None:
         """モックプロバイダーを初期化する。
 
         Args:
