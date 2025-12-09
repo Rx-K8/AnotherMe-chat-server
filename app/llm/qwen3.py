@@ -23,6 +23,7 @@ class Qwen3Provider(LLMProvider):
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, torch_dtype="auto", device_map="auto"
         )
+        self.max_tokens = 16384
 
     async def generate(
         self,
@@ -39,7 +40,7 @@ class Qwen3Provider(LLMProvider):
 
         generation_kwargs = {
             **model_inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else 16384,
+            "max_new_tokens": max_tokens if max_tokens is not None else self.max_tokens,
         }
 
         if temperature is not None:
@@ -75,7 +76,7 @@ class Qwen3Provider(LLMProvider):
 
         generation_kwargs = {
             **model_inputs,
-            "max_new_tokens": max_tokens if max_tokens is not None else 16384,
+            "max_new_tokens": max_tokens if max_tokens is not None else self.max_tokens,
             "streamer": streamer,
         }
 
