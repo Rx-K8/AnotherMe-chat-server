@@ -19,7 +19,7 @@ class Qwen3Provider(LLMProvider):
         """
 
         self.model_name = model_name
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)  # type: ignore[no-untyped-call]
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, torch_dtype="auto", device_map="auto"
         )

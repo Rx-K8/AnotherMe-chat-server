@@ -28,7 +28,7 @@ class Gemma3Provider(LLMProvider):
                 - google/gemma-3-27b-it (27B instruction-tuned)
         """
         self.model_name = model_name
-        self.processor = AutoProcessor.from_pretrained(model_name)
+        self.processor = AutoProcessor.from_pretrained(model_name)  # type: ignore[no-untyped-call]
         self.model = Gemma3ForConditionalGeneration.from_pretrained(
             model_name, device_map="auto"
         ).eval()
