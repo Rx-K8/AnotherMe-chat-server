@@ -1,8 +1,3 @@
-"""API依存性注入モジュール。
-
-FastAPIの依存性注入システムで使用する依存関係を定義する。
-"""
-
 from app.core.config import get_settings
 from app.llm.abc import LLMProvider
 from app.llm.gemma3 import Gemma3Provider
