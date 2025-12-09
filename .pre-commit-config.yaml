@@ -24,5 +24,7 @@ repos:
           - fastapi
           - pydantic
           - pydantic-settings
+          - transformers
+          - torch
         args:
           - --ignore-missing-imports
