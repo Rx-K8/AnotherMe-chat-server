@@ -11,7 +11,7 @@ from app.schemas.llm import LLMResponse, LLMStreamChunk
 class Qwen3Provider(LLMProvider):
     """Qwen-3 LLMプロバイダー"""
 
-    def __init__(self, model_name: str = "Qwen/Qwen3-4B-Instruct-2507"):
+    def __init__(self, model_name: str):
         """Qwen-3プロバイダーを初期化する。
 
         Args:

@@ -16,16 +16,11 @@ from app.schemas.llm import LLMResponse, LLMStreamChunk
 class Gemma3Provider(LLMProvider):
     """Gemma 3 LLMプロバイダー"""
 
-    def __init__(self, model_name: str = "google/gemma-3-4b-it"):
+    def __init__(self, model_name: str):
         """Gemma 3プロバイダーを初期化する。
 
         Args:
-            model_name: モデル名(デフォルト: google/gemma-3-4b-it)
-                利用可能なモデル:
-                - google/gemma-3-1b-it (1B instruction-tuned)
-                - google/gemma-3-4b-it (4B instruction-tuned)
-                - google/gemma-3-12b-it (12B instruction-tuned)
-                - google/gemma-3-27b-it (27B instruction-tuned)
+            model_name: モデル名
         """
         self.model_name = model_name
         self.processor = AutoProcessor.from_pretrained(model_name)  # type: ignore[no-untyped-call]
