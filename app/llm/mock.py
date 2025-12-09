@@ -38,7 +38,7 @@ class MockLLMProvider(LLMProvider):
         self,
         model_name: str = "mock-model",
         stream_delay: float = 0.05,
-    ):
+    ) -> None:
         """モックプロバイダーを初期化する。
 
         Args:
