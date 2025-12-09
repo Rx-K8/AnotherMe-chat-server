@@ -68,7 +68,6 @@ class Gemma3Provider(LLMProvider):
         """
         formatted_messages = self._prepare_messages(messages)
 
-        # チャットテンプレートを適用して入力を準備
         inputs = self.processor.apply_chat_template(
             formatted_messages,
             add_generation_prompt=True,
